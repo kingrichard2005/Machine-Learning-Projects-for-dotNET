@@ -80,7 +80,7 @@ let CsvStringtoIntArray (csvData:string) =
     let columns = csvData.Split(',')
     columns.[0..] |> Array.map int
 
-let genericCsvReader (_source:RawDataSource) =
+let genericFileReader (_source:RawDataSource) =
     (* path includeHeaders <- previously distinct input params were rolled up into custom type RawDataSource*) 
     // playing with pattern matching
     match _source.includeHeaders with
@@ -89,12 +89,12 @@ let genericCsvReader (_source:RawDataSource) =
 
 let ``Read Csv Data To Int Array Then To 2D Array (from pipelined functions)`` (_context:RawDataSource) =
     _context
-    |> genericCsvReader
+    |> genericFileReader
     |> Array.map CsvStringtoIntArray
     |> to2DIntArray
 
 let ``Read Csv Data To Int Array Then To 2D Array (from composed functions)`` = 
-    genericCsvReader 
+    genericFileReader 
     >> Array.map CsvStringtoIntArray 
     >> to2DIntArray
 
