@@ -28,10 +28,19 @@ let trainingPath = @"SpamorHam\datasamples\SMSSpamCollection"
 let trainingFile = Path.Combine(baseDirectory'.FullName, trainingPath)
 
 type RawDataSource = { Path:string; includeHeaders: bool }
+
+// Custom ReadLine(s) function for more efficient parsing of large files
+// using sequences to lazily read (i.e yield as needed) each line of a file.
+let readLines (filePath:string) = seq {
+    use sr = new StreamReader (filePath)
+    while not sr.EndOfStream do
+        yield sr.ReadLine ()
+}
+
 let genericFileReader (_source:RawDataSource) =
     match _source.includeHeaders with
-    | true -> File.ReadAllLines _source.Path |> Seq.toArray // headers
-    | false -> File.ReadAllLines _source.Path |> Seq.skip 1 |> Seq.toArray // or no headers
+    | true -> readLines _source.Path |> Seq.toArray // headers
+    | false -> readLines _source.Path |> Seq.skip 1 |> Seq.toArray // or no headers
 
 let options = { Path = trainingFile; includeHeaders = false }
 let dataset = genericFileReader options
