@@ -4,7 +4,6 @@
 //#load "NaiveBayes.fs"
 //open NaiveBayes
 open System.IO
-
 type DocType =
     | Ham
     | Spam
@@ -26,7 +25,6 @@ let baseDirectory = __SOURCE_DIRECTORY__
 let baseDirectory' = Directory.GetParent(baseDirectory)
 let trainingPath = @"SpamorHam\datasamples\SMSSpamCollection"
 let trainingFile = Path.Combine(baseDirectory'.FullName, trainingPath)
-
 type RawDataSource = { Path:string; includeHeaders: bool }
 
 // Custom ReadLine(s) function for more efficient parsing of large files
@@ -37,10 +35,36 @@ let readLines (filePath:string) = seq {
         yield sr.ReadLine ()
 }
 
+let isFile (_source:string) =
+    match File.Exists(_source) with
+    | true -> true
+    | false -> false
+
 let genericFileReader (_source:RawDataSource) =
     match _source.includeHeaders with
     | true -> readLines _source.Path |> Seq.toArray // headers
     | false -> readLines _source.Path |> Seq.skip 1 |> Seq.toArray // or no headers
 
 let options = { Path = trainingFile; includeHeaders = false }
-let dataset = genericFileReader options
+
+// Text book example
+let dataset = genericFileReader options |> Array.map parseLine
+let spamWithFREE =
+    dataset
+    |> Array.filter (fun (docType,_) -> docType = Spam)
+    |> Array.filter (fun (_,sms) -> sms.Contains("FREE"))
+    |> Array.length
+
+let hamWithFREE =
+    dataset
+    |> Array.filter (fun (docType,_) -> docType = Ham)
+    |> Array.filter (fun (_,sms) -> sms.Contains("FREE"))
+    |> Array.length
+
+let primitiveClassifier (sms:string) =
+    if (sms.Contains "FREE")
+    then Spam
+    else Ham
+
+let (docType,sms) = dataset.[0]
+primitiveClassifier sms
