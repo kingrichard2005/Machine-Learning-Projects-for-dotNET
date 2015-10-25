@@ -1,9 +1,11 @@
 ﻿// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
 // for more guidance on F# programming.
 
-//#load "NaiveBayes.fs"
-//open NaiveBayes
+#load "NaiveBayes.fs"
+open NaiveBayes.Classifier
 open System.IO
+
+// TODO: rollup file / data handling logic into helper module
 type DocType =
     | Ham
     | Spam
@@ -68,3 +70,6 @@ let primitiveClassifier (sms:string) =
 
 let (docType,sms) = dataset.[0]
 primitiveClassifier sms
+
+// classification section
+Hello "World"
