@@ -1,0 +1,1 @@
+Sandbox for exploring samples from Machine Learning Projects for .NET Developers
