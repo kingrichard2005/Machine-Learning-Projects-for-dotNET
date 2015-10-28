@@ -21,7 +21,7 @@ module Classifier =
         (document |> Seq.sumBy scoreToken)
 
     // Wildcard (_) indicates a generic type can be used
-    // i.e. instead of being 
+    // i.e. instead of being forced to always use DataLoader.DocType
     let classify (groups:(_ * DocsGroup)[])
                 (tokenizer:Tokenizer)
                 (txt:string) =

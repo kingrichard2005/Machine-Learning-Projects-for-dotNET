@@ -29,10 +29,12 @@ module DataLoader =
 
     let IsFile (_source:string) =
         match File.Exists(_source) with
-        | true -> true
-        | false -> false
+            | true -> true
+            | false -> false
 
     let GenericFileReader (_source:RawDataSource) =
-        match _source.includeHeaders with
-        | true -> ReadLines _source.Path |> Seq.toArray // headers
-        | false -> ReadLines _source.Path |> Seq.skip 1 |> Seq.toArray // or no headers
+        match IsFile(_source.Path) with
+            | true -> match _source.includeHeaders with
+                        | true -> ReadLines _source.Path |> Seq.toArray // headers
+                        | false -> ReadLines _source.Path |> Seq.skip 1 |> Seq.toArray // or no headers
+            | false -> failwith "Invalid file"
