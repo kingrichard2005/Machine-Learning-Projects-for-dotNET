@@ -9,6 +9,17 @@ module Classifier =
      { Proportion:float
       ;TokenFrequencies:Map<Token,float> }
 
+    // Helper funcs
+    let proportion count total = float count / float total
+
+    // see:https://en.wikipedia.org/wiki/Additive_smoothing
+    let laplace count total = float (count+1) / float (total+1)
+
+    let countIn (group:TokenizedDoc seq) (token:Token) =
+        group
+        |> Seq.filter (Set.contains token)
+        |> Seq.length
+
     // Scoring funcs
     let tokenScore (group:DocsGroup) (token:Token) =
         if group.TokenFrequencies.ContainsKey token
