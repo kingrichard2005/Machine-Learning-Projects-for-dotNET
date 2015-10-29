@@ -17,8 +17,8 @@ module Classifier =
 
     let countIn (group:TokenizedDoc seq) (token:Token) =
         group
-        |> Seq.filter (Set.contains token)
-        |> Seq.length
+          |> Seq.filter (Set.contains token)
+          |> Seq.length
 
     // Scoring funcs
     let tokenScore (group:DocsGroup) (token:Token) =
@@ -28,16 +28,33 @@ module Classifier =
 
     let score (document:TokenizedDoc) (group:DocsGroup) =
         let scoreToken = tokenScore group
-        log group.Proportion +
-        (document |> Seq.sumBy scoreToken)
+        log group.Proportion + (document |> Seq.sumBy scoreToken)
 
     // Wildcard (_) indicates a generic type can be used
     // i.e. instead of being forced to always use DataLoader.DocType
+    // Predict a document label
     let classify (groups:(_ * DocsGroup)[])
                 (tokenizer:Tokenizer)
                 (txt:string) =
         let tokenized = tokenizer txt
         groups
-        |> Array.maxBy (fun (label,group) ->
-            score tokenized group)
-        |> fst
+          |> Array.maxBy (fun (label,group) -> score tokenized group)
+          |> fst
+
+    // Analyze a document group
+    let analyze (group:TokenizedDoc seq)
+                (totalDocs:int)
+                (classificationTokens:Token Set) =
+      let groupSize = group |> Seq.length
+      let score token =
+        let count = countIn group token
+        laplace count groupSize
+      let scoredTokens =
+        classificationTokens
+          |> Set.map (fun token -> token, score token)
+          |> Map.ofSeq
+      let groupProportion = proportion groupSize totalDocs
+      {
+        Proportion = groupProportion
+        TokenFrequencies = scoredTokens
+      }
