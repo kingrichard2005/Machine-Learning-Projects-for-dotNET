@@ -35,3 +35,34 @@ let primitiveClassifier (sms:string) =
 
 let (docType,sms) = dataset.[0]
 primitiveClassifier sms
+
+// Using Naive bayes classifier
+let training = Seq.skip 1000 dataset |> Seq.toArray
+let validation = Seq.take 1000 dataset |> Seq.toArray
+
+// First attempt, train a simple model with a single token vocab., i.e. "txt"
+let txtClassifier = train training tokens (["txt"] |> set)
+validation
+|> Seq.averageBy (fun (docType,sms) ->
+    if docType = txtClassifier sms then 1.0 else 0.0)
+|> printfn "Based on 'txt', correctly classified: %.3f"
+
+// Second attempt uses all tokens from the training set
+// Extracts every token from a string
+let vocabulary (tokenizer:Tokenizer) (corpus:string seq) =
+    corpus
+    |> Seq.map tokenizer
+    |> Set.unionMany
+
+// Get all tokens in training set
+let allTokens =
+    training
+    |> Seq.map snd
+    |> vocabulary tokens
+
+let fullClassifier = train training tokens allTokens
+
+validation
+|> Seq.averageBy (fun (docType,sms) ->
+if docType = fullClassifier sms then 1.0 else 0.0)
+|> printfn "Based on all tokens, correctly classified: %.3f"
