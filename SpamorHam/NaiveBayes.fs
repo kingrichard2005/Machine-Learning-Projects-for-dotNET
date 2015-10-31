@@ -1,4 +1,5 @@
 ﻿namespace NaiveBayes
+open System.Text.RegularExpressions
 
 module Classifier =
     // NaiveBayes.Classifier type definitions
@@ -9,7 +10,15 @@ module Classifier =
      { Proportion:float
       ;TokenFrequencies:Map<Token,float> }
 
-    // Helper funcs
+    // Helpers
+    let matchWords = Regex(@"\w+")
+    let tokens (text:string) =
+        text.ToLowerInvariant()
+        |> matchWords.Matches
+        |> Seq.cast<Match>
+        |> Seq.map(fun m -> m.Value)
+        |> Set.ofSeq
+         
     let proportion count total = float count / float total
 
     // see:https://en.wikipedia.org/wiki/Additive_smoothing
@@ -17,8 +26,8 @@ module Classifier =
 
     let countIn (group:TokenizedDoc seq) (token:Token) =
         group
-          |> Seq.filter (Set.contains token)
-          |> Seq.length
+        |> Seq.filter (Set.contains token)
+        |> Seq.length
 
     // Scoring funcs
     let tokenScore (group:DocsGroup) (token:Token) =
@@ -34,8 +43,8 @@ module Classifier =
     // i.e. instead of being forced to always use DataLoader.DocType
     // Predict a document label
     let classify (groups:(_ * DocsGroup)[])
-                (tokenizer:Tokenizer)
-                (txt:string) =
+                 (tokenizer:Tokenizer)
+                 (txt:string) =
         let tokenized = tokenizer txt
         groups
           |> Array.maxBy (fun (label,group) -> score tokenized group)
@@ -51,8 +60,8 @@ module Classifier =
         laplace count groupSize
       let scoredTokens =
         classificationTokens
-          |> Set.map (fun token -> token, score token)
-          |> Map.ofSeq
+        |> Set.map (fun token -> token, score token)
+        |> Map.ofSeq
       let groupProportion = proportion groupSize totalDocs
       {
         Proportion = groupProportion
@@ -63,13 +72,13 @@ module Classifier =
     let learn (docs:(_ * string)[])
               (tokenizer:Tokenizer)
               (classificationTokens:Token Set) =
-        let total = docs.Length
-        docs
-        |> Array.map (fun (label,docs) -> label,tokenizer docs)
-        |> Seq.groupBy fst
-        |> Seq.map (fun (label,group) -> label,group |> Seq.map snd)
-        |> Seq.map (fun (label,group) -> label,analyze group total classificationTokens)
-        |> Seq.toArray
+      let total = docs.Length
+      docs
+      |> Array.map (fun (label,docs) -> label,tokenizer docs)
+      |> Seq.groupBy fst
+      |> Seq.map (fun (label,group) -> label,group |> Seq.map snd)
+      |> Seq.map (fun (label,group) -> label,analyze group total classificationTokens)
+      |> Seq.toArray
 
     // Train a Naive Bayes classifier model
     let train (docs:(_ * string)[])
