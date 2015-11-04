@@ -44,19 +44,27 @@ primitiveClassifier sms
 let training = Seq.skip 1000 dataset |> Seq.toArray
 let validation = Seq.take 1000 dataset |> Seq.toArray
 
-evaluate tokens (["txt"] |> set) training validation
-
-// Second attempt uses all tokens from the training set
-// Extracts every token from a string
+// Func: Extracts every token from a string-encoded corpus
 let vocabulary (tokenizer:Tokenizer) (corpus:string seq) =
     corpus
     |> Seq.map tokenizer
     |> Set.unionMany
 
-// Get all tokens in training set
-let allTokens =
+// First classifier modeling attempts to use "txt" keyword as basis for Spam / Ham classification
+evaluate lowerCaseTokenizer (["txt"] |> set) training validation
+
+// Second classifier modeling attempts to use all (lowercase variants) of tokens from the training set
+let lowercaseTokens =
     training
     |> Seq.map snd
-    |> vocabulary tokens
+    |> vocabulary lowerCaseTokenizer
 
-evaluate tokens allTokens training validation
+evaluate lowerCaseTokenizer lowercaseTokens training validation
+
+// Third classifier modeling attempts to use all (cased variants) of tokens from the training set
+let casedTokens =
+    training
+    |> Seq.map snd
+    |> vocabulary casedTokenizer
+
+evaluate casedTokenizer casedTokens training validation

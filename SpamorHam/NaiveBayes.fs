@@ -4,8 +4,16 @@ open System.Text.RegularExpressions
 module Classifier =
     // Helpers
     let matchWords = Regex(@"\w+")
-    let tokens (text:string) =
+
+    let lowerCaseTokenizer (text:string) =
         text.ToLowerInvariant()
+        |> matchWords.Matches
+        |> Seq.cast<Match>
+        |> Seq.map(fun m -> m.Value)
+        |> Set.ofSeq
+
+    let casedTokenizer (text:string) =
+        text
         |> matchWords.Matches
         |> Seq.cast<Match>
         |> Seq.map(fun m -> m.Value)
