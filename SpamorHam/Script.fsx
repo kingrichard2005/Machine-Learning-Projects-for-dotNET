@@ -44,9 +44,7 @@ primitiveClassifier sms
 let training = Seq.skip 1000 dataset |> Seq.toArray
 let validation = Seq.take 1000 dataset |> Seq.toArray
 
-// First attempt, train a simple model with a single token vocab., i.e. "txt"
-let txtClassifier = train training tokens (["txt"] |> set)
-printfn "Based on 'txt', correctly classified: %.3f" (validator validation txtClassifier)
+evaluate tokens (["txt"] |> set) training validation
 
 // Second attempt uses all tokens from the training set
 // Extracts every token from a string
@@ -61,5 +59,4 @@ let allTokens =
     |> Seq.map snd
     |> vocabulary tokens
 
-let fullClassifier = train training tokens allTokens
-printfn "Based on 'txt', correctly classified: %.3f" (validator validation fullClassifier)
+evaluate tokens allTokens training validation
