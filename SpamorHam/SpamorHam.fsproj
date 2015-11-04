@@ -47,6 +47,7 @@
     <Compile Include="DomainTypes.fs" />
     <Compile Include="DataLoader.fs" />
     <Compile Include="NaiveBayes.fs" />
+    <Compile Include="Validation.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
   <PropertyGroup>
