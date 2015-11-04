@@ -1,8 +1,10 @@
 ﻿// Learn more about F# at http://fsharp.org. See the 'F# Tutorial' project
 // for more guidance on F# programming.
 
+#load "DomainTypes.fs"
 #load "DataLoader.fs"
 #load "NaiveBayes.fs"
+open NaiveBayes.DomainTypes
 open NaiveBayes.DataLoader
 open NaiveBayes.Classifier
 open System.IO

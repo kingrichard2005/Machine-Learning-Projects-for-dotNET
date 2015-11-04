@@ -2,11 +2,7 @@
 open System.IO
 
 module DataLoader = 
-    type RawDataSource = { Path:string; includeHeaders: bool }
-    type DocType =
-        | Ham
-        | Spam
-
+    
     let ParseDocType (label:string) =
         match label with
         | "ham" -> Ham

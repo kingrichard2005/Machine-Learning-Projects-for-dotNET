@@ -5,16 +5,7 @@ open System
 
 // Define your library scripting code here
 // Testing
-// useful resource:
-(*
-    - http://dungpa.github.io/fsharp-cheatsheet/
-    - http://fsharpforfunandprofit.com/troubleshooting-fsharp/
-    - http://fsharpforfunandprofit.com/posts/overview-of-types-in-fsharp/
-    - http://fsharpforfunandprofit.com/posts/defining-functions/
-    - http://fsharpforfunandprofit.com/posts/match-expression/
-    - http://fsharpforfunandprofit.com/posts/function-values-and-simple-values/
-    - http://blogs.msdn.com/b/chrsmith/archive/2008/06/14/function-composition.aspx
-*)
+
 // text book example types and funcs
 type Observation = { Label:string; Pixels: int[] }
 type Distance = int[] * int[] -> int

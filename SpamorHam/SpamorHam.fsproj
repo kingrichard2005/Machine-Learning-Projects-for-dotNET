@@ -44,9 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="DomainTypes.fs" />
+    <Compile Include="DataLoader.fs" />
     <Compile Include="NaiveBayes.fs" />
     <None Include="Script.fsx" />
-    <Compile Include="DataLoader.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

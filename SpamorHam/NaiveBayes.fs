@@ -1,17 +1,7 @@
 namespace NaiveBayes
 open System.Text.RegularExpressions
 
-module DomainTypes = 
-    type Token = string
-    type Tokenizer = string -> Token Set
-    type TokenizedDoc = Token Set
-    type DocsGroup =
-        { Proportion:float
-        ;TokenFrequencies:Map<Token,float> }
-
 module Classifier =
-    open DomainTypes
-    
     // Helpers
     let matchWords = Regex(@"\w+")
     let tokens (text:string) =
