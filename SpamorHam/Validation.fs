@@ -14,4 +14,4 @@ module Validation =
                 (training:(DocType * string)[])
                 (validation:(DocType * string)[]) = 
         let classifier = train training tokenizer tokens
-        printfn "Based on 'txt', correctly classified: %.3f" (validator validation classifier)
+        printfn "Correctly classified: %.3f" (validator validation classifier)
