@@ -69,6 +69,7 @@ let casedTokens =
 
 evaluate casedTokenizer casedTokens training validation
 
+// see chapter section: Ch 2. - "Less is more"
 // Fourth classifier modeling eliminates noise by reducing the number of 
 // tokens (i.e. removing features) considered for classifying Spam vs Ham 
 // down to the top N most frequently used tokens
@@ -99,3 +100,10 @@ let topTokens = Set.union topHam topSpam
 
 // Integrate tokens into a model and evaluate performance
 evaluate casedTokenizer topTokens training validation
+
+// see chapter section: Ch 2. - "Choosing Our Words Carefully"
+// Debug: Print (to inspect) the top 20 tokens for Ham and Spam
+ham |> top 20 casedTokenizer |> Seq.iter (printfn "%s")
+spam |> top 20 casedTokenizer |> Seq.iter (printfn "%s")
+
+// TODO: remove "filler material"
