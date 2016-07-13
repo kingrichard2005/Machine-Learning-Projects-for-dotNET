@@ -10,6 +10,7 @@ open NaiveBayes.DataLoader
 open NaiveBayes.Classifier
 open NaiveBayes.Validation
 open System.IO
+open System.Text.RegularExpressions
 
 // Source files
 let baseDirectory = __SOURCE_DIRECTORY__
@@ -106,4 +107,93 @@ evaluate casedTokenizer topTokens training validation
 ham |> top 20 casedTokenizer |> Seq.iter (printfn "%s")
 spam |> top 20 casedTokenizer |> Seq.iter (printfn "%s")
 
-// TODO: remove "filler material"
+// Instead of relying on a list of stop words, we will do something simpler. Our topHam and topSpam sets
+// contain the most frequently used tokens in Ham and in Spam. If a token appears in both lists, it is likely
+// simply a word that is frequently found in English text messages, and is not particularly specific to either Ham
+// or Spam. Let’s identify all these common tokens, which correspond to the intersection of both lists, remove
+// them from our tokens selection, and run the analysis again:
+
+let commonTokens = Set.intersect topHam topSpam
+let specificTokens = Set.difference topTokens commonTokens
+
+evaluate casedTokenizer specificTokens training validation
+
+// See chapter section: Ch 2. - "Creating New Features"
+let rareTokens n (tokenizer:Tokenizer) (docs:string []) =
+    let tokenized = docs |> Array.map tokenizer
+    let tokens = tokenized |> Set.unionMany
+    tokens
+    |> Seq.sortBy (fun t -> countIn tokenized t)
+    |> Seq.take n
+    |> Set.ofSeq
+
+let rareHam = ham |> rareTokens 50 casedTokenizer |> Seq.iter (printfn "%s")
+let rareSpam = spam |> rareTokens 50 casedTokenizer |> Seq.iter (printfn "%s")
+
+// Listing 2-11. Recognizing phone numbers
+let phoneWords = Regex(@"0[7-9]\d{9}")
+let phone (text:string) =
+    match (phoneWords.IsMatch text) with
+    | true -> "__PHONE__"
+    | false -> text
+
+let txtCode = Regex(@"\b\d{5}\b")
+let txt (text:string) =
+    match (txtCode.IsMatch text) with
+    | true -> "__TXT__"
+    | false -> text
+
+let smartTokenizer = casedTokenizer >> Set.map phone >> Set.map txt
+let smartTokens =
+    specificTokens
+    |> Set.add "__TXT__"
+    |> Set.add "__PHONE__"
+
+evaluate smartTokenizer smartTokens training validation
+
+// See chapter section: Ch 2. - "Dealing with Numeric Values"
+// Listing 2-12. Spam probability based on message length
+let lengthAnalysis len =
+    let long (msg:string) = msg.Length > len
+    let ham,spam =
+        dataset
+        |> Array.partition (fun (docType,_) -> docType = Ham)
+    let spamAndLongCount =
+        spam
+        |> Array.filter (fun (_,sms) -> long sms)
+        |> Array.length
+    let longCount =
+        dataset
+        |> Array.filter (fun (_,sms) -> long sms)
+        |> Array.length
+    let pSpam = (float spam.Length) / (float dataset.Length)
+    let pLongIfSpam =
+        float spamAndLongCount / float spam.Length
+    let pLong =
+        float longCount /
+        float (dataset.Length)
+    let pSpamIfLong = pLongIfSpam * pSpam / pLong
+    pSpamIfLong
+
+for l in 10 .. 10 .. 130 do
+    printfn "P(Spam if Length > %i) = %.4f" l (lengthAnalysis l)
+
+// See chapter section: Ch 2. - "Understanding Errors"
+// Listing 2-13. Error by class
+let bestClassifier = train training smartTokenizer smartTokens
+validation
+|> Seq.filter (fun (docType,_) -> docType = Ham)
+|> Seq.averageBy (fun (docType,sms) ->
+if docType = bestClassifier sms
+then 1.0
+else 0.0)
+|> printfn "Properly classified Ham: %.5f"
+validation
+|> Seq.filter (fun (docType,_) -> docType = Spam)
+|> Seq.averageBy (fun (docType,sms) ->
+if docType = bestClassifier sms
+then 1.0
+else 0.0)
+|> printfn "Properly classified Spam: %.5f"
+
+// End of chapter 2
