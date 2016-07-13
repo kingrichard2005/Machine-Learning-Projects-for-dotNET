@@ -76,6 +76,32 @@ let countries = wb.Countries
 let pop2000 = [ for c in countries -> c.Indicators.``Population, total``.[2000]]
 let pop2010 = [ for c in countries -> c.Indicators.``Population, total``.[2010]]
 
-// TODO: See chapter section: Ch 3. - The R Type Provider
+// See chapter section: Ch 3. - The R Type Provider
+// note: R programming language required on local development system
+#r @"R.NET.Community.1.6.5\lib\net40\RDotNet.dll"
+#r @"RProvider.1.1.20\lib\net40\RProvider.Runtime.dll"
+#r @"RProvider.1.1.20\lib\net40\RProvider.dll"
+open RProvider
+open RProvider.``base``
+open RProvider.graphics
 
+// Listing 3-7. Basic summary statistics from R
+// Retrieve an (F#) list of country surfaces
+let surface = [ for c in countries -> c.Indicators.``Surface area (sq. km)``.[2010]]
+// Produce summary statistics
+R.summary(surface) |> R.print
+
+// Figure 3-6. Basic histogram of country surfaces using R graphics
+R.hist(surface)
+
+// Figure 3-7. Log-transformed country surface areas using R graphics
+// Can use F# code...
+R.hist(surface |> List.map log)
+// ...or R functions
+R.hist(surface |> R.log)
+
+// Figure 3-8. Basic scatterplot using R.plot
+R.plot(surface, pop2010) 
+
+// See chapter section: Ch 3. - Analyzing Data Together with R Data Frames
 
