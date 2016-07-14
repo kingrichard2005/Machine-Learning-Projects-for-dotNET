@@ -27,6 +27,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ConwaysGameOfLife", "Conway
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TheJoyOfTypeProvders", "TheJoyOfTypeProvders\TheJoyOfTypeProvders.fsproj", "{4E9ACC85-EE29-4436-A4D0-B559E9CDC785}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OfBikesAndMen", "OfBikesAndMen\OfBikesAndMen.fsproj", "{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{4E9ACC85-EE29-4436-A4D0-B559E9CDC785}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E9ACC85-EE29-4436-A4D0-B559E9CDC785}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E9ACC85-EE29-4436-A4D0-B559E9CDC785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
