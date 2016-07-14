@@ -103,5 +103,5 @@ R.hist(surface |> R.log)
 // Figure 3-8. Basic scatterplot using R.plot
 R.plot(surface, pop2010) 
 
-// See chapter section: Ch 3. - Analyzing Data Together with R Data Frames
+// TODO: See chapter section: Ch 3. - Analyzing Data Together with R Data Frames
 
