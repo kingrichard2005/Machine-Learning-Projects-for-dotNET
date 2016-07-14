@@ -123,4 +123,17 @@ rdf |> R.plot
 // Summary of all features
 rdf |> R.summary |> R.print
 
-// TODO: See chapter section: Ch 3. Deedle, a .NET Data Frame
+// See chapter section: Ch 3. - Deedle, a .NET Data Frame
+// Listing 3-9. Creating series and data frames with Deedle
+#r @"Deedle.1.2.5\lib\net40\Deedle.dll"
+open Deedle
+
+let series1 = series [ "Alpha", 1.; "Bravo", 2.; "Delta", 4. ]
+let series2 = series [ "Bravo", 20.; "Charlie", 30.; "Delta", 40. ]
+let toyFrame = frame [ "First", series1; "Second", series2 ]
+
+series1 |> Stats.sum
+toyFrame |> Stats.mean
+toyFrame?Second |> Stats.mean
+
+// See chapter section: Ch 3. - Data of the World, Unite!
