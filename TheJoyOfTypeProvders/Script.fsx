@@ -136,4 +136,56 @@ series1 |> Stats.sum
 toyFrame |> Stats.mean
 toyFrame?Second |> Stats.mean
 
+toyFrame?New <- toyFrame?First + toyFrame?Second
+toyFrame |> Stats.mean
+
 // See chapter section: Ch 3. - Data of the World, Unite!
+// Listing 3-10. Constructing a Deedle data frame with World Bank data
+
+let population2000 =
+    series [ for c in countries -> c.Code, c.Indicators.``Population, total``.[2000]]
+let population2010 =
+    series [ for c in countries -> c.Code, c.Indicators.``Population, total``.[2010]]
+let surfaceSeries =
+    series [ for c in countries -> c.Code, c.Indicators.``Surface area (sq. km)``.[2010]]
+
+let ddf =
+    frame [ "Pop2000", population2000
+            "Pop2010", population2010
+            "Surface", surfaceSeries   ]
+ddf?Code <- ddf.RowKeys
+
+#r @"R.NET.Community.1.6.5\lib\net40\RDotNet.dll"
+#r @"RProvider.1.1.20\lib\net40\RProvider.Runtime.dll"
+#r @"RProvider.1.1.20\lib\net40\RProvider.dll"
+#r @"Deedle.RPlugin.1.2.5\lib\net40\Deedle.RProvider.Plugin.dll"
+
+let dataframe =
+    frame [ "Pop2000", population2000
+            "Pop2010", population2010
+            "Surface", surfaceSeries  ]
+
+dataframe?Code <- dataframe.RowKeys
+
+// Listing 3-11. Creating a map with rworldmap
+open Deedle.RPlugin
+open RProvider.rworldmap
+
+let map = R.joinCountryData2Map(dataframe,"ISO3","Code")
+// Figure 3-11. Map of 2000 world population
+R.mapCountryData(map,"Pop2000")
+
+// Listing 3-12. Producing a population density map
+dataframe?Density <- dataframe?Pop2010 / dataframe?Surface
+let map2 = R.joinCountryData2Map(dataframe,"ISO3","Code")
+// Figure 3-12. Map of world population density
+R.mapCountryData(map2,"Density")
+
+// Listing 3-13. Producing a population growth map
+dataframe?Growth <- (dataframe?Pop2010 - dataframe?Pop2000) / dataframe?Pop2000
+let map3 = R.joinCountryData2Map(dataframe,"ISO3","Code")
+// Figure 3-13. Map of world population growth, 2000 to 2010
+R.mapCountryData(map3,"Growth")
+
+
+
