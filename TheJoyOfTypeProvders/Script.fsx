@@ -103,5 +103,24 @@ R.hist(surface |> R.log)
 // Figure 3-8. Basic scatterplot using R.plot
 R.plot(surface, pop2010) 
 
-// TODO: See chapter section: Ch 3. - Analyzing Data Together with R Data Frames
+// See chapter section: Ch 3. - Analyzing Data Together with R Data Frames
+// Listing 3-8. Creating and plotting an R data frame
+let pollution = [ for c in countries -> c.Indicators.``CO2 emissions (kt)``.[2000]]
+let education = [ for c in countries -> c.Indicators.``School enrollment, secondary (gross), gender parity index (GPI)``.[2000]]
 
+let rdf = 
+    [   "Pop2000", box pop2000
+        "Pop2010" , box pop2010
+        "Surface" , box surface
+        "Pollution", box pollution
+        "Education", box education ]
+    |> namedParams
+    |> R.data_frame
+
+// Scatterplot of all features
+rdf |> R.plot
+
+// Summary of all features
+rdf |> R.summary |> R.print
+
+// TODO: See chapter section: Ch 3. Deedle, a .NET Data Frame
