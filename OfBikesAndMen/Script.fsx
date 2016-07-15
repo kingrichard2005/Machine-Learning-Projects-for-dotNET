@@ -35,4 +35,25 @@ Chart.Combine   [
     Chart.Line (ma 7 dataseries)
     Chart.Line (ma 30 dataseries)]
 
-// TODO See chapter section: Ch 4. - Fitting a Model to the Data
+// See chapter section: Ch 4. - Fitting a Model to the Data
+let baseline =
+    let avg = data |> Seq.averageBy (fun x -> float x.Cnt)
+    data |> Seq.averageBy (fun x -> abs (float x.Cnt - avg))
+
+// Defining a Basic Straight-Line (i.e. Linear Regression) Model
+type Obs = Data.Row
+let model (theta0, theta1) (observation:Obs) =
+    theta0 + theta1 * (float observation.Instant)
+
+
+let model0 = model (4504., 0.)
+let model1 = model (6000., -4.5)
+
+// Figure 4-4. Visualizing two demo linear regression models
+Chart.Combine   [
+    Chart.Line dataseries
+    Chart.Line [ for obs in data -> model0 obs ]
+    Chart.Line [ for obs in data -> model1 obs ]]
+
+//  See chapter section: Ch 4. - Finding the Lowest-Cost Model
+
