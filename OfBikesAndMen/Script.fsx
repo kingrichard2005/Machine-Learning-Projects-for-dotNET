@@ -55,5 +55,17 @@ Chart.Combine   [
     Chart.Line [ for obs in data -> model0 obs ]
     Chart.Line [ for obs in data -> model1 obs ]]
 
-//  See chapter section: Ch 4. - Finding the Lowest-Cost Model
+// See chapter section: Ch 4. - Finding the Lowest-Cost Model
+type Model = Obs -> float
+
+let cost (data:Obs seq) (m:Model) =
+    data
+    |> Seq.sumBy (fun x -> pown (float x.Cnt - m x) 2) // Euclidean-distance metric squares differences to penalize larger errors over smaller ones
+    |> sqrt
+
+let overallCost = cost data
+overallCost model0 |> printfn "Cost model0: %.0f"
+overallCost model1 |> printfn "Cost model1: %.0f"
+
+// TODO See chapter section: Ch 4. - Finding the Minimum of a (Cost) Function with Gradient Descent
 
