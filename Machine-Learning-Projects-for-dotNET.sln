@@ -29,6 +29,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TheJoyOfTypeProvders", "The
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OfBikesAndMen", "OfBikesAndMen\OfBikesAndMen.fsproj", "{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Chapter5", "Chapter5\Chapter5.fsproj", "{375E69F8-048E-4635-9051-DF3EDD333219}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2B9C2B9-4EC1-4AA8-BD82-311C10050D22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375E69F8-048E-4635-9051-DF3EDD333219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375E69F8-048E-4635-9051-DF3EDD333219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375E69F8-048E-4635-9051-DF3EDD333219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375E69F8-048E-4635-9051-DF3EDD333219}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
