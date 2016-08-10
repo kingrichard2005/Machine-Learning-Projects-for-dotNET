@@ -77,3 +77,24 @@ let (clusters1, classifier1) =
     clustering observations1 k
 
 //  TODO: Leftoff on section "Analyzing the Results"
+clusters1
+    |> Seq.iter (fun (id,profile) ->
+        printfn "CLUSTER %i" id
+        profile
+        |> Array.iteri (fun i value -> printfn "%16s %.1f" headers.[i] value))
+
+Chart.Combine [
+    for (id,profile) in clusters1 ->
+        profile
+        |> Seq.mapi (fun i value -> headers.[i], value)
+        |> Chart.Bar
+    ]
+|> fun chart -> chart.WithXAxis(LabelStyle=labels)
+
+//  How big are each of these clusters?
+observations1
+|> Seq.countBy (fun obs -> classifier1 obs)
+|> Seq.iter (fun (clusterID, count) ->
+    printfn "Cluster %i: %i elements" clusterID count)
+
+//  Leftoff: section "Rescaling Our Dataset to Improve Clusters"
