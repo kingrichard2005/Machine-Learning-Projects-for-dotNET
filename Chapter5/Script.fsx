@@ -118,5 +118,69 @@ observations2
 |> Seq.iter (fun (clusterID, count) ->
     printfn "Cluster %i: %i elements" clusterID count)
 
-//  Leftoff on section "Identifying How Many Clusters to Search For"
+//  Section: Identifying How Many Clusters to Search For
+//  ===
 
+//  Defining the Akaike Information Criterion, or AIC, cluster quality metric
+
+//  Start by using the 'Rule of Thumb' industry standard method to calibrate the AIC
+let ruleOfThumb (n:int) = sqrt (float n / 2.)
+let k_ruleOfThumb = ruleOfThumb (observations2.Length)
+
+//  Listing 5-10. Akaike Information Criterion (AIC) definition
+let squareError (obs1:Observation) (obs2:Observation) =
+    (obs1,obs2)
+    ||> Seq.zip
+    |> Seq.sumBy (fun (x1,x2) -> pown (x1-x2) 2)
+
+let RSS (dataset:Observation[]) centroids =
+    dataset
+    |> Seq.sumBy (fun obs ->
+        centroids
+        |> Seq.map (squareError obs)
+        |> Seq.min)
+
+let AIC (dataset:Observation[]) centroids =
+    let k = centroids |> Seq.length
+    let m = dataset.[0] |> Seq.length
+    RSS dataset centroids + float (2 * m * k)
+
+//  In order to figure out a decent value for k, we’ll try out every single possibility between k = 1 
+//  and k = 25. Because the clustering itself is going to be unstable for low values of k, we will run the algorithm a couple
+//  of times for each value and average out the corresponding AIC so that we can cancel out potential flukes due
+//  to, for instance, unfortunate initial value selection:
+
+//  Figure 5-19. Search for k-minimizing AIC
+[1..25]
+|> Seq.map (fun k ->
+    let value =
+        [ for _ in 1 .. 10 ->
+            let (clusters, classifier) =
+                let clustering = clusterize distance centroidOf
+                clustering observations2 k
+            AIC observations2 (clusters |> Seq.map snd) ]
+        |> List.average
+    k, value)
+|> Chart.Line
+
+//  Listing 5-11. Our final (best) clusters
+let (bestClusters, bestClassifier) =
+    let clustering = clusterize distance centroidOf
+    let k = 10
+    seq {
+        for _ in 1 .. 20 ->
+            clustering observations2 k
+    }
+    |> Seq.minBy (fun (cs,f) ->
+        RSS observations2 (cs |> Seq.map snd))
+
+bestClusters
+|> Seq.sortBy fst
+|> Seq.iter (fun (id,profile) ->
+    printfn "CLUSTER %i" id
+    profile
+    |> Array.iteri (fun i value ->
+        if value > 0.2 then printfn "%16s %.1f" headers.[i] value))
+
+//  Leftoff on section "Detecting How Features Are Related"
+//  ===
