@@ -76,7 +76,7 @@ let (clusters1, classifier1) =
     let k = 5
     clustering observations1 k
 
-//  TODO: Leftoff on section "Analyzing the Results"
+//  Section "Analyzing the Results"
 clusters1
     |> Seq.iter (fun (id,profile) ->
         printfn "CLUSTER %i" id
