@@ -182,5 +182,16 @@ bestClusters
     |> Array.iteri (fun i value ->
         if value > 0.2 then printfn "%16s %.1f" headers.[i] value))
 
-//  Leftoff on section "Detecting How Features Are Related"
-//  ===
+//  Leftoff on section "Detecting How Features Are Related - Correlations Between StackOverflow Tags"
+#r @"..\packages\MathNet.Numerics.3.13.1\lib\net40\MathNet.Numerics.dll"
+#r @"..\packages\MathNet.Numerics.FSharp.3.13.1\lib\net40\MathNet.Numerics.FSharp.dll"
+
+open MathNet
+open MathNet.Numerics.LinearAlgebra
+open MathNet.Numerics.Statistics
+
+let correlations =
+    observations
+    |> Matrix.Build.DenseOfColumnArrays
+    |> Matrix.toRowArrays
+    |> Correlation.PearsonMatrix
