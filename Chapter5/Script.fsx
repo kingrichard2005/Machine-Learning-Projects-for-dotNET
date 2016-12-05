@@ -195,3 +195,23 @@ let correlations =
     |> Matrix.Build.DenseOfColumnArrays
     |> Matrix.toRowArrays
     |> Correlation.PearsonMatrix
+
+let feats = headers.Length
+let correlated =
+    [
+        for col in 0 .. (feats - 1) do
+            for row in (col + 1) .. (feats - 1) ->
+                correlations.[col,row], headers.[col], headers.[row]
+    ]
+    |> Seq.sortBy (fun (corr, f1, f2) -> - abs corr)
+    |> Seq.take 20
+    |> Seq.iter (fun (corr, f1, f2) ->
+        printfn "%s %s : %.2f" f1 f2 corr)
+
+// Identifying Better Features with Principal Component
+// Analysis - Recombining Features with Algebra
+let observation = vector [ 2.0; 5.0 ]
+let transform =
+    matrix [[ 1.0; 3.0 ]
+            [ 2.0; 1.0 ] ]
+transform * observation |> printfn "%A"
