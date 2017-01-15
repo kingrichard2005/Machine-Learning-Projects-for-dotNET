@@ -68,4 +68,26 @@ let principalComponent comp1 comp2 =
 principalComponent 1 2;;
 principalComponent 3 4;;
 
-// left off: Analyzing the Extracted Features
+// Analyzing the Extracted Features
+// Listing 5-19. Plotting observations against the principal components
+let projections comp1 comp2 =
+    let title = sprintf "Component %i vs %i" comp1 comp2
+    let features = headers.Length
+    let coords =
+        normalized
+        |> Seq.map projector
+        |> Seq.map (fun obs -> obs.[features-comp1], obs.[features-comp2])
+    Chart.Point (coords, Title = title)
+    |> Chart.WithXAxis(Min = -200.0, Max = 500.0,
+        MajorGrid = ChartTypes.Grid(Interval = 100.),
+        LabelStyle = ChartTypes.LabelStyle(Interval = 100.),
+        MajorTickMark = ChartTypes.TickMark(Enabled = false))
+    |> Chart.WithYAxis(Min = -200.0, Max = 500.0,
+        MajorGrid = ChartTypes.Grid(Interval = 100.),
+        LabelStyle = ChartTypes.LabelStyle(Interval = 100.),
+        MajorTickMark = ChartTypes.TickMark(Enabled = false))
+
+projections 1 2;;
+projections 3 4;;
+
+// leftoff: Making Recommendations
