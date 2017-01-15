@@ -61,6 +61,7 @@
     <Compile Include="KMeans.fs" />
     <Compile Include="PCA.fs" />
     <None Include="PCAScript.fsx" />
+    <None Include="PrimitiveTagRecommender.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Charting">

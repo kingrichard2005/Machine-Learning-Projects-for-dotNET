@@ -89,5 +89,3 @@ let projections comp1 comp2 =
 
 projections 1 2;;
 projections 3 4;;
-
-// leftoff: Making Recommendations
