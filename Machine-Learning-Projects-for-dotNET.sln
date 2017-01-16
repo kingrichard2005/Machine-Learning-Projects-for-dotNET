@@ -31,6 +31,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OfBikesAndMen", "OfBikesAnd
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Chapter5", "Chapter5\Chapter5.fsproj", "{375E69F8-048E-4635-9051-DF3EDD333219}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Chapter6_TreesAndForests", "Chapter6_TreesAndForests\Chapter6_TreesAndForests.fsproj", "{B471DBAF-480B-482F-85F7-76045B7449E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{375E69F8-048E-4635-9051-DF3EDD333219}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{375E69F8-048E-4635-9051-DF3EDD333219}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{375E69F8-048E-4635-9051-DF3EDD333219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B471DBAF-480B-482F-85F7-76045B7449E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B471DBAF-480B-482F-85F7-76045B7449E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B471DBAF-480B-482F-85F7-76045B7449E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B471DBAF-480B-482F-85F7-76045B7449E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
