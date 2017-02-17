@@ -14,3 +14,11 @@ dataset.Rows
 |> printfn "Chances of survival: %.3f"
 
 // leftoff: Taking a Look at Features
+// Listing 6-2. Computing the survival rate for different groups
+let survivalRate (passengers:Passenger seq) =
+    let total = passengers |> Seq.length
+    let survivors =
+        passengers
+        |> Seq.filter (fun p -> p.Survived)
+        |> Seq.length
+    100.0 * (float survivors / float total)
